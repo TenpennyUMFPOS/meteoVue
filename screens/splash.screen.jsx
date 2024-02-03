@@ -5,7 +5,7 @@ import { Text, TouchableRipple } from 'react-native-paper';
 
 const SplashScreen = ({ navigation }) => {
     HandleOnPress = () => {
-        navigation.navigate('HomeScreen')
+        navigation.navigate('CitiesScreen')
     }
     return (
         <LinearGradient colors={['#3d70d2', '#7ca9ff']} style={styles.container}>

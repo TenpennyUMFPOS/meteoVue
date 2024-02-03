@@ -1,54 +1,47 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Button, Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
-
-import { StyleSheet, View, Image, ScrollView, Alert, ActivityIndicator } from 'react-native';
-
+import { Text, StyleSheet, View, Alert, ActivityIndicator } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 import MainWeather from '../components/mainWeather.component';
 
-
-
-const API_KEY = '3804ac37ac4512abc4e63c17c49a171b'
-
+const API_KEY = '3804ac37ac4512abc4e63c17c49a171b';
 
 const HomeScreen = () => {
+    const route = useRoute();
+    const selectedCity = route.params?.cityName || 'Paris'; // Default to Paris if no city is provided
+
     const [weatherData, setWeatherData] = useState(null);
     const [loaded, setLoaded] = useState(false);
 
     const fetchWeatherData = async (cityName) => {
         try {
-            setLoaded(false)
-            const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}&units=metric`)
-            if (response.status = 200) {
+            setLoaded(false);
+            const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}&units=metric`);
+            if (response.status === 200) {
                 const data = await response.json();
                 setWeatherData(data);
             } else {
-                setWeatherData(n)
+                setWeatherData(null); // Set weatherData to null on error
             }
-            setLoaded(true)
-
+            setLoaded(true);
         } catch (error) {
-            Alert.alert('Error', error.message)
+            Alert.alert('Error', error.message);
         }
+    };
 
-    }
     useEffect(() => {
-        fetchWeatherData('Paris');
-    }, []);
+        fetchWeatherData(selectedCity);
+    }, [selectedCity]);
 
     if (!loaded) {
         return (
             <View>
-                <Text> LOADING  ....</Text>
+                <Text>LOADING ....</Text>
             </View>
-        )
+        );
     }
 
-
-    return (
-        <MainWeather weatherData={weatherData} />
-    );
-}
-
+    return <MainWeather weatherData={weatherData} />;
+};
 const styles = StyleSheet.create({
     container: {
         flex: 1,

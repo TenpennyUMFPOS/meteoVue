@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert } from 'react-native';
 import { Button, Searchbar } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
+import citiesData from '../data/cities.json';
+
 const CitiesScreen = ({ navigation }) => {
-    const [cities, setCities] = useState(['Paris', 'New York', 'Tokyo']);
+    const [cities, setCities] = useState([]);
     const [searchCity, setSearchCity] = useState('');
+    const [validCities, setValidCities] = useState([]);
+
+    useEffect(() => {
+        setValidCities(citiesData);
+    }, []);
 
     const handleCityPress = (city) => {
         navigation.navigate('HomeScreen', { cityName: city });
@@ -12,8 +19,14 @@ const CitiesScreen = ({ navigation }) => {
 
     const handleAddCity = () => {
         if (searchCity.trim() !== '') {
-            setCities((prevCities) => [...prevCities, searchCity]);
-            setSearchCity('');
+            if (validCities.includes(searchCity)) {
+                setCities((prevCities) => [...prevCities, searchCity]);
+                setSearchCity('');
+            } else {
+                Alert.alert('Error', 'Invalid city name. Please enter a valid city.');
+            }
+        } else {
+            Alert.alert('Error', 'Please enter a city name');
         }
     };
 

@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { Button, Searchbar } from 'react-native-paper';
+import { Button, Searchbar, Snackbar } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import citiesData from '../data/cities.json';
+
 
 const CitiesScreen = ({ navigation }) => {
     const [cities, setCities] = useState([]);
     const [searchCity, setSearchCity] = useState('');
     const [validCities, setValidCities] = useState([]);
+
+    const [visible, setVisible] = React.useState(false);
+    const onToggleSnackBar = () => setVisible(!visible);
+    const onDismissSnackBar = () => setVisible(false);
 
     useEffect(() => {
         setValidCities(citiesData);
@@ -23,10 +28,10 @@ const CitiesScreen = ({ navigation }) => {
                 setCities((prevCities) => [...prevCities, searchCity]);
                 setSearchCity('');
             } else {
-                Alert.alert('Error', 'Invalid city name. Please enter a valid city.');
+                Alert.alert('Invalid city name. Please enter a valid city.');
             }
         } else {
-            Alert.alert('Error', 'Please enter a city name');
+            Alert.alert('Please enter a city name');
         }
     };
 
@@ -74,6 +79,7 @@ const CitiesScreen = ({ navigation }) => {
                     </Button>
                 </View>
                 <View style={styles.citiesContainer}>
+                    <Button style={{ alignSelf: 'flex-end', backgroundColor: "#fff", marginBottom: 20 }} onPress={onToggleSnackBar}> ❗ </Button>
                     {cities.map((city, index) => (
                         <TouchableOpacity
                             key={index}
@@ -86,6 +92,15 @@ const CitiesScreen = ({ navigation }) => {
                     ))}
                 </View>
             </View>
+
+            <Snackbar
+                visible={visible}
+                onDismiss={onDismissSnackBar}
+                action={{
+                    label: 'X',
+                }}>
+                Long Press on a city to view more options!
+            </Snackbar>
         </LinearGradient>
     );
 };
@@ -102,7 +117,7 @@ const styles = StyleSheet.create({
     searchButtonContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        top: 30,
+        top: 40,
     },
     searchBar: {
         flex: 1,
@@ -119,6 +134,7 @@ const styles = StyleSheet.create({
         width: '100%',
         marginHorizontal: 10,
         marginTop: 40,
+        right: 10
     },
     cityButton: {
         padding: 15,

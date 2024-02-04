@@ -16,9 +16,10 @@ const mainWeather = ({ weatherData }) => {
         sys: { sunrise }
     } = weatherData;
 
-    const timeSlots = ['2 pm', '3 pm', '4 pm', '5 pm', '6 pm'];
+    const timeSlots = ['2 pm', '3 pm', '4 pm', '5 pm'];
     const convertCelsiusToFahrenheit = (celsius) => {
-        return (celsius * 9 / 5) + 32;
+        const fahrenheit = (celsius * 9 / 5) + 32;
+        return fahrenheit.toFixed(1);
     }
 
     return (
@@ -60,10 +61,10 @@ const mainWeather = ({ weatherData }) => {
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.sv}>
                         {timeSlots.map((timeSlot, index) => (
                             <View key={index} style={styles.dayButton}>
-                                <Text>{timeSlot}</Text>
-                                <Text>Test</Text>
+                                <Text style={{ color: "#A098AE" }}>{timeSlot}</Text>
+
                                 <View>
-                                    <Text>Test2</Text>
+                                    <Image source={rainImage} style={{ width: 50, height: 50 }} />
                                 </View>
                             </View>
                         ))}
@@ -77,14 +78,14 @@ const mainWeather = ({ weatherData }) => {
                 <View style={styles.detailsView}>
                     <Image source={tempImage} style={{ width: 50, height: 50, }} />
                     <View style={{ left: 10 }}>
-                        <Text style={{ color: "#363B64", fontWeight: "bold" }} variant='titleLarge'>{convertCelsiusToFahrenheit(temp)}°</Text>
+                        <Text style={{ color: "#363B64", fontWeight: "bold", fontSize: 18 }} variant='titleLarge'>{convertCelsiusToFahrenheit(temp)}°</Text>
                         <Text style={{ color: "#A098AE" }} variant='labelSmall'>Fahrenheit </Text>
                     </View>
                 </View>
                 <View style={styles.detailsView}>
                     <Image source={windImage} style={{ width: 50, height: 50, }} />
                     <View style={{ left: 10 }}>
-                        <Text style={{ color: "#363B64", fontWeight: "bold" }} variant='titleLarge'>{speed} mp/h</Text>
+                        <Text style={{ color: "#363B64", fontWeight: "bold", fontSize: 18 }} variant='titleLarge'>{speed} mp/h </Text>
                         <Text style={{ color: "#A098AE" }} variant='labelSmall'>Pressure </Text>
                     </View>
                 </View>
@@ -97,14 +98,14 @@ const mainWeather = ({ weatherData }) => {
                 <View style={styles.detailsView}>
                     <Image source={sunImage} style={{ width: 50, height: 50, }} />
                     <View style={{ left: 10 }}>
-                        <Text style={{ color: "#363B64", fontWeight: "bold" }} variant='titleLarge'>{temp_max}°C</Text>
+                        <Text style={{ color: "#363B64", fontWeight: "bold", fontSize: 18 }} variant='titleLarge'>{temp_max}°C</Text>
                         <Text variant='labelSmall' style={{ color: "#A098AE" }}>Max Tempreture </Text>
                     </View>
                 </View>
                 <View style={styles.detailsView}>
                     <Image source={rainImage} style={{ width: 50, height: 50, }} />
                     <View style={{ left: 10 }}>
-                        <Text style={{ color: "#363B64", fontWeight: "bold" }} variant='titleLarge'>{humidity} %</Text>
+                        <Text style={{ color: "#363B64", fontWeight: "bold", fontSize: 18 }} variant='titleLarge'>{humidity} %</Text>
                         <Text style={{ color: "#A098AE" }} variant='labelSmall'>Humidity </Text>
                     </View>
                 </View>

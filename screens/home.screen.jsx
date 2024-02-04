@@ -7,7 +7,7 @@ const API_KEY = '3804ac37ac4512abc4e63c17c49a171b';
 
 const HomeScreen = () => {
     const route = useRoute();
-    const selectedCity = route.params?.cityName || 'Paris'; // Default to Paris if no city is provided
+    const selectedCity = route.params?.cityName || 'Paris';
 
     const [weatherData, setWeatherData] = useState(null);
     const [loaded, setLoaded] = useState(false);
@@ -20,7 +20,7 @@ const HomeScreen = () => {
                 const data = await response.json();
                 setWeatherData(data);
             } else {
-                setWeatherData(null); // Set weatherData to null on error
+                setWeatherData(null);
             }
             setLoaded(true);
         } catch (error) {
@@ -32,10 +32,18 @@ const HomeScreen = () => {
         fetchWeatherData(selectedCity);
     }, [selectedCity]);
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoaded(true);
+        }, 2000);
+
+        return () => clearTimeout(timer);
+    }, []);
+
     if (!loaded) {
         return (
-            <View>
-                <Text>LOADING ....</Text>
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator animating={true} size="large" />
             </View>
         );
     }
@@ -102,6 +110,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         bottom: "30%"
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Button, Searchbar } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import citiesData from '../data/cities.json';
@@ -30,24 +30,58 @@ const CitiesScreen = ({ navigation }) => {
         }
     };
 
+    const handleCityLongPress = (index) => {
+        Alert.alert(
+            'City Options',
+            '',
+            [
+                {
+                    text: 'Consult',
+                    onPress: () => handleCityPress(cities[index]),
+                },
+                {
+                    text: 'Delete',
+                    onPress: () => handleDeleteCity(index),
+                },
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+            ],
+            { cancelable: false }
+        );
+    };
+
+    const handleDeleteCity = (index) => {
+        const updatedCities = [...cities];
+        updatedCities.splice(index, 1);
+        setCities(updatedCities);
+    };
+
     return (
-        <LinearGradient colors={['#3d70d2', '#7ca9ff']} style={styles.containerLG}>
+        <LinearGradient colors={['#e9e9e9', '#e9e9e9']} style={styles.containerLG}>
             <View style={styles.container}>
-                <Text style={styles.title}>Select or Add a City:</Text>
-                <Searchbar
-                    style={styles.searchBar}
-                    placeholder="Enter a city name"
-                    value={searchCity}
-                    onChangeText={(text) => setSearchCity(text)}
-                    onSubmitEditing={handleAddCity}
-                />
-                <Button mode="contained" onPress={handleAddCity} style={styles.addButton}>
-                    Add City
-                </Button>
+                <View style={styles.searchButtonContainer}>
+                    <Searchbar
+                        style={styles.searchBar}
+                        placeholder="Enter a city name"
+                        value={searchCity}
+                        onChangeText={(text) => setSearchCity(text)}
+                        onSubmitEditing={handleAddCity}
+                    />
+                    <Button mode="contained" onPress={handleAddCity} style={styles.addButton}>
+                        Add City
+                    </Button>
+                </View>
                 <View style={styles.citiesContainer}>
                     {cities.map((city, index) => (
-                        <TouchableOpacity key={index} onPress={() => handleCityPress(city)} style={styles.cityButton}>
-                            <Text style={styles.cityButtonText}>{city}</Text>
+                        <TouchableOpacity
+                            key={index}
+                            onPress={() => handleCityPress(city)}
+                            onLongPress={() => handleCityLongPress(index)}
+                            style={styles.cityButton}
+                        >
+                            <Text style={styles.cityButtonText}> 📍 {city}</Text>
                         </TouchableOpacity>
                     ))}
                 </View>
@@ -59,46 +93,45 @@ const CitiesScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         paddingHorizontal: 20,
     },
     containerLG: {
         flex: 1,
         backgroundColor: '#fff',
     },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        color: "#fff"
+    searchButtonContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        top: 30,
     },
     searchBar: {
+        flex: 1,
         marginBottom: 10,
-        width: '100%',
     },
     addButton: {
-        marginVertical: 10,
+        marginLeft: 10,
         borderRadius: 10,
         backgroundColor: '#363B64',
-        color: "black"
+        color: 'black',
+        height: 40,
     },
     citiesContainer: {
         width: '100%',
         marginHorizontal: 10,
-        marginTop: 25,
+        marginTop: 40,
     },
     cityButton: {
         padding: 15,
-        marginVertical: 10,
         backgroundColor: '#fff',
         borderRadius: 10,
-        alignItems: 'center',
+        alignItems: 'flex-start',
+        marginBottom: 10,
     },
     cityButtonText: {
         color: '#363B64',
         fontSize: 20,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        textAlign: 'left',
     },
 });
 
